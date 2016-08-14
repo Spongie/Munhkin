@@ -10,6 +10,8 @@ type GameState = {
     Players : List<Player>
     DoorCards : List<DoorCard>
     DiscardedDoorCards : List<DoorCard>
+    TreasureCards : List<TreasureCard>
+    DiscardedTreasureCards : List<TreasureCard>
     MonstersFighting : List<MonsterCard>
     }
 
@@ -19,6 +21,9 @@ type Game() =
         
     member this.drawRandomDoorCard state =
         state.DoorCards.[random.Next state.DoorCards.Length]
+
+    member this.drawRandomTreasureCard (state : GameState) =
+        state.TreasureCards.[random.Next state.TreasureCards.Length]
 
     member this.startFight (state: GameState) (monster : MonsterCard) =
         if state.CurrentPlayer.Level <= monster.MinimumPlayerLevel then state
