@@ -4,8 +4,6 @@ module DomainTypes =
 
     type TurnState = FightingMonster | LootOrSummonMonster
 
-    type TODO_FIX = unit
-
     type ItemCard = {
         Name : string
         Description : string

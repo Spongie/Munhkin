@@ -1,7 +1,7 @@
 ﻿namespace Munchkin
 
 open System 
-open Cards
+open DomainTypes
 
 module Game = 
 
