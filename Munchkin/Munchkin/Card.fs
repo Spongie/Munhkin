@@ -1,21 +1,43 @@
 ﻿namespace Munchkin
 
-type Card(name: string) =
-    member this.Name = name
+module DomainTypes =
 
-type TreasureCard(name: string) =
-    inherit Card(name)
+    type TurnState = FightingMonster | LootOrSummonMonster
 
-type DoorCard(name: string) =
-    inherit Card(name)
+    type TODO_FIX = unit
 
-type CurseCard(name: string) =
-    inherit DoorCard(name)
-        
-type MonsterCard(name: string, level: int, minimumPlayerLevel: int, levelReward: int, treasureCount: int) =
-    inherit DoorCard(name)  
-        member this.Level = level
-        member this.MinimumPlayerLevel = minimumPlayerLevel 
-        member this.LevelReward = levelReward
-        member this.TreasureCount = treasureCount
+    type ItemCard = {
+        Name : string
+        Description : string
+        }
+
+    type CurseCard = {
+        Name : string
+        Description : string
+    }
+    
+    and MonsterCard = {
+            Name : string
+            Description : string
+            Level : int
+            MinimumPlayerLevel : int
+            LevelReward : int
+            TreasureCount : int
+            }
+    
+    and DoorCard = 
+        | MonsterCard of MonsterCard 
+        | CurseCard of CurseCard
+
+    and TreasureCard =
+        | ItemCard of ItemCard
+
+    and GameState = {
+        TurnState : TurnState
+        CurrentPlayer : Player
+        Players : Player list
+        DoorCards : DoorCard list
+        DiscardedDoorCards : DoorCard list
+        MonstersFighting : MonsterCard list
+        }
     

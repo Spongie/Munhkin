@@ -1,37 +1,26 @@
 ﻿namespace Munchkin
 
 open System 
+open Cards
 
-type TurnState = FightingMonster | LootOrSummonMonster
-
-type GameState = {
-    TurnState : TurnState
-    CurrentPlayer : Player
-    Players : List<Player>
-    DoorCards : List<DoorCard>
-    DiscardedDoorCards : List<DoorCard>
-    TreasureCards : List<TreasureCard>
-    DiscardedTreasureCards : List<TreasureCard>
-    MonstersFighting : List<MonsterCard>
-    }
-
-type Game() =
+module Game = 
 
     let random = new Random();
         
-    member this.drawRandomDoorCard state =
+    let drawRandomDoorCard state =
         state.DoorCards.[random.Next state.DoorCards.Length]
 
-    member this.drawRandomTreasureCard (state : GameState) =
-        state.TreasureCards.[random.Next state.TreasureCards.Length]
-
-    member this.startFight (state: GameState) (monster : MonsterCard) =
+    let startFight (state: GameState) (monster : MonsterCard) =
         if state.CurrentPlayer.Level <= monster.MinimumPlayerLevel then state
         else
-        { state with MonstersFighting =  monster :: state.MonstersFighting;  DoorCards = state.DoorCards |> List.except [monster] }
+        { state with MonstersFighting =  monster :: state.MonstersFighting; TurnState = TurnState.FightingMonster;  DoorCards = state.DoorCards |> List.except [DoorCard.MonsterCard monster] }
         
-    member this.startTurn (state : GameState) =
-        let doorCard = this.drawRandomDoorCard state
-        if (doorCard :? MonsterCard) then this.startFight state (doorCard :?> MonsterCard)
-        else
-        { state with TurnState = TurnState.LootOrSummonMonster; DoorCards = state.DoorCards |> List.except [doorCard] }
+    let handleCardDrawn card state =
+        match card with
+        | MonsterCard(m) -> startFight state m
+        | CurseCard(c) -> { state with TurnState = TurnState.LootOrSummonMonster; DoorCards = state.DoorCards |> List.except [DoorCard.CurseCard c] }
+    
+
+    let startTurn (state : GameState) =
+        let doorCard = drawRandomDoorCard state
+        handleCardDrawn doorCard
