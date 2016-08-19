@@ -10,7 +10,7 @@ module Game =
     let drawRandomDoorCard state =
         state.DoorCards.[random.Next state.DoorCards.Length]
 
-    let startFight (state: GameState) (monster : MonsterCard) =
+    let startFight state monster =
         if state.CurrentPlayer.Level <= monster.MinimumPlayerLevel then state
         else
         { state with MonstersFighting =  monster :: state.MonstersFighting; TurnState = TurnState.FightingMonster;  DoorCards = state.DoorCards |> List.except [DoorCard.MonsterCard monster] }
@@ -21,6 +21,6 @@ module Game =
         | CurseCard(c) -> { state with TurnState = TurnState.LootOrSummonMonster; DoorCards = state.DoorCards |> List.except [DoorCard.CurseCard c] }
     
 
-    let startTurn (state : GameState) =
+    let startTurn state =
         let doorCard = drawRandomDoorCard state
         handleCardDrawn doorCard

@@ -7,7 +7,8 @@ module DomainTypes =
     type ItemCard = {
         Name : string
         Description : string
-        }
+        Bonus : int
+    }
 
     type CurseCard = {
         Name : string
@@ -15,13 +16,13 @@ module DomainTypes =
     }
     
     and MonsterCard = {
-            Name : string
-            Description : string
-            Level : int
-            MinimumPlayerLevel : int
-            LevelReward : int
-            TreasureCount : int
-            }
+        Name : string
+        Description : string
+        Level : int
+        MinimumPlayerLevel : int
+        LevelReward : int
+        TreasureCount : int
+    }
     
     and DoorCard = 
         | MonsterCard of MonsterCard 
@@ -30,6 +31,16 @@ module DomainTypes =
     and TreasureCard =
         | ItemCard of ItemCard
 
+    and Card =
+        | TreasureCard of TreasureCard
+        | DoorCard of DoorCard
+
+    and Player = {
+        Level : int
+        Cards : Card list
+        Equipped : ItemCard list
+    }
+
     and GameState = {
         TurnState : TurnState
         CurrentPlayer : Player
@@ -37,5 +48,5 @@ module DomainTypes =
         DoorCards : DoorCard list
         DiscardedDoorCards : DoorCard list
         MonstersFighting : MonsterCard list
-        }
+    }
     

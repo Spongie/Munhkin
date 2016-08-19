@@ -1,7 +1,13 @@
 ﻿namespace Munchkin
 
-type Player(cards: List<Card>, level: int) =
+open DomainTypes
 
-    member this.Cards = cards
-    member this.Level = level
+module Player =
+
+    let getPlayerLevel player =
+        player.Equipped
+        |>List.map (fun x -> x.Bonus)
+        |>List.sum
+        
+
 
