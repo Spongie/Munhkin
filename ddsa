@@ -1,0 +1,37 @@
+[1mdiff --cc Munchkin/Munchkin/Game.fs[m
+[1mindex 0a6c6d6,13a08a9..0000000[m
+[1m--- a/Munchkin/Munchkin/Game.fs[m
+[1m+++ b/Munchkin/Munchkin/Game.fs[m
+[36m@@@ -9,19 -8,20 +9,29 @@@[m [mmodule Game [m
+      let random = new Random();[m
+          [m
+      let drawRandomDoorCard state =[m
+[31m -        state.DoorCards.[random.Next state.DoorCards.Length][m
+[32m +        state.DoorCards.[random.Next state.DoorCards.Length] [m
+  [m
+[31m -    let startFight (state: GameState) (monster : MonsterCard) =[m
+[32m +    let startFight state monster =[m
+          if state.CurrentPlayer.Level <= monster.MinimumPlayerLevel then state[m
+          else[m
+[32m++<<<<<<< HEAD[m
+[32m +        { state with CurrentBattle = createBattle monster; TurnState = TurnState.FightingMonster;  DoorCards = state.DoorCards |> List.except [DoorCard.MonsterCard monster] }[m
+[32m++=======[m
+[32m+         { state with MonstersFighting =  monster :: state.MonstersFighting; TurnState = TurnState.FightingMonster;  DoorCards = state.DoorCards |> List.except [DoorCard.MonsterCard monster]; DiscardedDoorCards = DoorCard.MonsterCard monster :: state.DiscardedDoorCards }[m
+[32m++>>>>>>> 2ea834ba241b18a871920762e42e0c603cc962b4[m
+          [m
+      let handleCardDrawn card state =[m
+          match card with[m
+          | MonsterCard(m) -> startFight state m[m
+[32m++<<<<<<< HEAD[m
+[32m +        | CurseCard(c) -> { state with TurnState = TurnState.LootOrSummonMonster; DoorCards = state.DoorCards |> List.except [DoorCard.CurseCard c] }[m
+[32m +        | _ -> {state with TurnState = TurnState.LootOrSummonMonster; CurrentPlayer = {state.CurrentPlayer with Cards = Card.DoorCard card :: state.CurrentPlayer.Cards } }[m
+[32m++=======[m
+[32m+         | CurseCard(c) -> [m
+[32m+         { state with TurnState = TurnState.LootOrSummonMonster; DoorCards = state.DoorCards |> List.except [DoorCard.CurseCard c]; DiscardedDoorCards = DoorCard.CurseCard c :: state.DiscardedDoorCards }[m
+[32m+     [m
+[32m++>>>>>>> 2ea834ba241b18a871920762e42e0c603cc962b4[m
+  [m
+[31m -    let startTurn (state : GameState) =[m
+[32m +    let startTurn state =[m
+          let doorCard = drawRandomDoorCard state[m
+          handleCardDrawn doorCard[m
