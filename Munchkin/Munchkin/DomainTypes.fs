@@ -31,12 +31,17 @@ module DomainTypes =
     and RaceCard = {
         Name : string
     }
-    
+
+    and BuffCard = {
+        Bonus : int
+    }
+
     and DoorCard = 
         | MonsterCard of MonsterCard 
         | CurseCard of CurseCard
         | ClassCard of ClassCard
         | RaceCard of RaceCard
+        | BuffCard of BuffCard
 
     and TreasureCard =
         | ItemCard of ItemCard
@@ -52,8 +57,8 @@ module DomainTypes =
     }
 
     and Battle = {
-        MonsterBuffs : DoorCard list
-        PlayerBuffs : DoorCard list
+        MonsterBuffs : BuffCard list
+        PlayerBuffs : BuffCard list
         MonstersFighting : MonsterCard list
     }
 

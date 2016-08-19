@@ -1,6 +1,7 @@
 ﻿namespace Munchkin
 
 open DomainTypes
+open Player 
 
 module Battle =
     
@@ -12,3 +13,8 @@ module Battle =
         else
         {battle with MonsterBuffs = buffCard :: battle.PlayerBuffs}
 
+    let getPlayerTotalLevel battle state =
+        battle.PlayerBuffs
+        |>List.map (fun x -> x.Bonus)
+        |>List.sum
+        |> (+) (getPlayerLevel  state.CurrentPlayer)
