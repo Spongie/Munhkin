@@ -23,10 +23,20 @@ module DomainTypes =
         LevelReward : int
         TreasureCount : int
     }
+
+    and ClassCard = {
+        Name : string
+    }
+
+    and RaceCard = {
+        Name : string
+    }
     
     and DoorCard = 
         | MonsterCard of MonsterCard 
         | CurseCard of CurseCard
+        | ClassCard of ClassCard
+        | RaceCard of RaceCard
 
     and TreasureCard =
         | ItemCard of ItemCard

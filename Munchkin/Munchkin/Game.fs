@@ -19,7 +19,7 @@ module Game =
         match card with
         | MonsterCard(m) -> startFight state m
         | CurseCard(c) -> { state with TurnState = TurnState.LootOrSummonMonster; DoorCards = state.DoorCards |> List.except [DoorCard.CurseCard c] }
-    
+        | _ -> {state with TurnState = TurnState.LootOrSummonMonster; CurrentPlayer = {state.CurrentPlayer with Cards = Card.DoorCard card :: state.CurrentPlayer.Cards } }
 
     let startTurn state =
         let doorCard = drawRandomDoorCard state
