@@ -51,12 +51,18 @@ module DomainTypes =
         Equipped : ItemCard list
     }
 
+    and Battle = {
+        MonsterBuffs : DoorCard list
+        PlayerBuffs : DoorCard list
+        MonstersFighting : MonsterCard list
+    }
+
     and GameState = {
         TurnState : TurnState
         CurrentPlayer : Player
         Players : Player list
         DoorCards : DoorCard list
         DiscardedDoorCards : DoorCard list
-        MonstersFighting : MonsterCard list
+        CurrentBattle : Battle
     }
     

@@ -2,18 +2,19 @@
 
 open System 
 open DomainTypes
+open Battle
 
 module Game = 
 
     let random = new Random();
         
     let drawRandomDoorCard state =
-        state.DoorCards.[random.Next state.DoorCards.Length]
+        state.DoorCards.[random.Next state.DoorCards.Length] 
 
     let startFight state monster =
         if state.CurrentPlayer.Level <= monster.MinimumPlayerLevel then state
         else
-        { state with MonstersFighting =  monster :: state.MonstersFighting; TurnState = TurnState.FightingMonster;  DoorCards = state.DoorCards |> List.except [DoorCard.MonsterCard monster] }
+        { state with CurrentBattle = createBattle monster; TurnState = TurnState.FightingMonster;  DoorCards = state.DoorCards |> List.except [DoorCard.MonsterCard monster] }
         
     let handleCardDrawn card state =
         match card with
